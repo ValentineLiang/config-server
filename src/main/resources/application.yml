@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: config-service
+  cloud:
+    config:
+      # 配置中心的分支
+      label: wechat,master
+      server:
+        git:
+          # 配置中心通过git从远程git库，有时本地的拷贝被污染，这时配置中心无法从远程库更新本地配置,设置force-pull=true，则强制从远程库中更新本地库
+          force-pull: true
+          # 对于使用git,svn做为后端配置，从远程库获取配置文件，需要存储到本地文件
+          basedir: /workspace_lrj/github-project/config-server/tmp/spring-cloud-repo
+          # 配置使用的地址，使用本人的github项目地址
+          uri: https://github.com/ValentineLiang/config-files.git
+          # 指定搜索路径，如果有多个路径则使用,分隔
+          search-paths: dev,prod
+          username:
+          password:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root
+    password: root
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://valentine:5201314@localhost:6001/eureka/
+    # 从eureka服务器注册表中获取注册信息的时间间隔（s），默认为30秒
+    registry-fetch-interval-seconds: 30
+    # 询问Eureka服务url信息变化的时间间隔（s），默认为300秒
+    eureka-service-url-poll-interval-seconds: 300
+    # 复制实例变化信息到eureka服务器所需要的时间间隔（s），默认为30秒
+    instance-info-replication-interval-seconds: 30
+    # eureka需要超时连接之前需要等待的时间，默认为5秒
+    eureka-server-connect-timeout-seconds: 5
+    # eureka需要超时读取之前需要等待的时间，默认为8秒
+    eureka-server-read-timeout-seconds: 8
+    # eureka客户端允许eureka服务器主机连接的总数目，默认是50
+    eureka-server-total-connections-per-host: 50
+  instance:
+    instance-id:  ${server.address}:${server.port}
+    ip-address:  ${server.address}
+    prefer-ip-address: true
+
+
+
+logging:
+  level: error
+server:
+  address: 127.0.0.1
+  port: 7070
